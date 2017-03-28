@@ -4,16 +4,22 @@ Cooperative threading versions of map, filter, forEach, etc, suitable for big pr
 
 One of the gotchas with Node.js is that it's single-threaded. Although the advantages of doing concurrency in a single-threaded environment far outstrip the disadvantages, there are still times when you want to do some lengthy processing but don't want to block up the thread for new HTTP requests or UI activity.
 
-This module provides common functional primitives like `map`, `filter` and `forEach` but that call `setImmediate` regularly, roughly every 10ms, so as not to block other activity. This means you can do large processing and stay responsive.
+This module provides common functional primitives like `map`, `filter` and `forEach` but that call `setImmediate` regularly so as not to block other activity. This means you can do large processing and stay responsive.
+
+The trick is to call setImmediate regularly so your application is still responsive, but not on every iteration so the processing isn't too slow. This module does that by processing the arrays and calling setImmediate once every 10ms or so, not too much, not too little. This interval is configurable of course.
 
 ```js
 const cooperative = require('cooperative')
 
 let veryLargeArray = [1, 2, 3, ...]
 
-let results = async cooperative.map(veryLargeArray, (item, index) => {
-  // some lengthy operation
+let resultsPromise = cooperative.map(veryLargeArray, (item, index) => {
+  // some involved operation
 })
+
+// continue to process other IO, UI events, etc
+
+let results = await resultsPromise
 ```
 
 # map
