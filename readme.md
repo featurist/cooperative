@@ -11,7 +11,7 @@ const cooperative = require('cooperative')
 
 let veryLargeArray = [1, 2, 3, ...]
 
-let results = async cooperative.map([1, 2, 3, ...], (item, index) => {
+let results = async cooperative.map(veryLargeArray, (item, index) => {
   // some lengthy operation
 })
 ```
