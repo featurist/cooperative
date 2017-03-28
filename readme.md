@@ -19,7 +19,7 @@ let results = async cooperative.map([1, 2, 3, ...], (item, index) => {
 # map
 
 ```js
-let mappedResults = await map(array, mapper, options)
+let mappedResults = await cooperative.map(array, mapper, options)
 ```
 
 * array - an array
@@ -29,7 +29,7 @@ let mappedResults = await map(array, mapper, options)
 # filter
 
 ```js
-let filteredArray = await filter(array, predicate, options)
+let filteredArray = await cooperative.filter(array, predicate, options)
 ```
 
 * array - an array
@@ -39,7 +39,7 @@ let filteredArray = await filter(array, predicate, options)
 # forEach
 
 ```js
-await forEach(array, action, options)
+await cooperative.forEach(array, action, options)
 ```
 
 * array - an array
@@ -48,7 +48,7 @@ await forEach(array, action, options)
 # reduce
 
 ```js
-let reducedResults = await reduce(array, operator, initial, options)
+let reducedResults = await cooperative.reduce(array, operator, initial, options)
 ```
 
 * array - an array
@@ -59,7 +59,7 @@ let reducedResults = await reduce(array, operator, initial, options)
 # mapObject
 
 ```js
-let mappedObject = await mapObject(object, mapper, options)
+let mappedObject = await cooperative.mapObject(object, mapper, options)
 ```
 
 * object - an object
