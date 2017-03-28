@@ -1,0 +1,71 @@
+# cooperative
+
+Cooperative threading versions of map, filter, forEach, etc, suitable for big processing in single-threaded Node.js.
+
+One of the gotchas with Node.js is that it's single-threaded. Although the advantages of doing concurrency in a single-threaded environment far outstrip the disadvantages, there are still times when you want to do some lengthy processing but don't want to block up the thread for new HTTP requests or UI activity.
+
+This module provides common functional primitives like `map`, `filter` and `forEach` but that call `setImmediate` regularly so as not to block other activity. This means you can do large processing and stay responsive.
+
+```js
+const cooperative = require('cooperative')
+
+let veryLargeArray = [1, 2, 3, ...]
+
+let results = async cooperative.map([1, 2, 3, ...], (item, index) => {
+  // some lengthy operation
+})
+```
+
+# map
+
+```js
+let mappedResults = await map(array, mapper, options)
+```
+
+* array - an array
+* mapper(item, index) - a function taking each array `item` and `index`, and returning either a value or a Promise of a value.
+* mappedResults - the corresponding results of `mapper` for each `item` in `array`
+
+# filter
+
+```js
+let filteredArray = await filter(array, predicate, options)
+```
+
+* array - an array
+* predicate(item, index) - a function taking each array `item` and `index`, and returning either a value or a Promise of a value. If the value is truthy then the item is returned in the 
+* filteredArray - the items in `array` for which `predicate` returned a truthy value
+
+# forEach
+
+```js
+await forEach(array, action, options)
+```
+
+* array - an array
+* action(item, index) - a function taking each array `item` and `index` and performing an action. If the return value is a promise, then `forEach` will wait for all promises to complete.
+
+# reduce
+
+```js
+let reducedResults = await reduce(array, operator, initial, options)
+```
+
+* array - an array
+* operator(accumulator, item, index) - a function taking an `accumulator`, each array `item` and `index`. The return value is the accumulator for the `operator` call on the next `item`.
+* initial - the value of the first accumulator
+* reducedResults - the last accumulator
+
+# mapObject
+
+```js
+let mappedObject = await mapObject(object, mapper, options)
+```
+
+* object - an object
+* mapper(value, key) - a function taking each `value` and `key` in `object`, the value returned is placed into a new object at `key`. This function can return a promise.
+* mappedObject - a new object with it's values mapped by `mapper`
+
+# Options
+
+* options.interval - the amount of time in ms to allow processing before calling `setInterval`, defaults to 10ms.
