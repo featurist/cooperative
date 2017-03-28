@@ -1,4 +1,4 @@
-# cooperative
+# cooperative [![npm version](https://img.shields.io/npm/v/cooperative.svg)](https://www.npmjs.com/package/cooperative) [![npm](https://img.shields.io/npm/dm/cooperative.svg)](https://www.npmjs.com/package/cooperative) [![Build Status](https://travis-ci.org/featurist/cooperative.svg?branch=master)](https://travis-ci.org/featurist/cooperative)
 
 Cooperative threading versions of map, filter, forEach, etc, suitable for big processing in single-threaded Node.js.
 
