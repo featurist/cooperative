@@ -1,6 +1,6 @@
 {
   "name": "cooperative",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "cooperative threading versions of map, filter, forEach, etc, suitable for big processing in single-threaded Node.js",
   "main": "inde.js",
   "directories": {
