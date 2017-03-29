@@ -2,26 +2,31 @@ var map = require('../map')
 var expect = require('chai').expect
 var _ = require('underscore')
 
+require('es6-promise').polyfill();
+
 describe('map', function () {
-  it('maps an array', async function () {
+  it('maps an array', function () {
     var items = [1, 2, 3, 4]
 
-    var results = await map(items, (n) => -n)
-    expect(results).to.eql([-1, -2, -3, -4])
+    return map(items, function (n) { return -n }).then(function (results) {
+      expect(results).to.eql([-1, -2, -3, -4])
+    })
   })
 
-  it('maps an array with promise mapper', async function () {
+  it('maps an array with promise mapper', function () {
     var items = [1, 2, 3, 4]
 
-    var results = await map(items, (n) => Promise.resolve(-n))
-    expect(results).to.eql([-1, -2, -3, -4])
+    return map(items, function (n) { return Promise.resolve(-n) }).then(function (results) {
+      expect(results).to.eql([-1, -2, -3, -4])
+    })
   })
 
-  it('maps an empty array', async function () {
+  it('maps an empty array', function () {
     var items = []
 
-    var results = await map(items, (n) => -n)
-    expect(results).to.eql([])
+    return map(items, function (n) { return -n }).then(function (results) {
+      expect(results).to.eql([])
+    })
   })
 
   it("doesn't hold up the main thread", function () {
@@ -42,7 +47,7 @@ describe('map', function () {
       while ((Date.now() - startTime) <= 5) {
       }
       return -n
-    }).then(() => {
+    }).then(function () {
       expect(times.length).to.be.greaterThan(1)
       expect(_.max(times)).to.be.lessThan(20)
     })

@@ -2,26 +2,31 @@ var reduce = require('../reduce')
 var expect = require('chai').expect
 var _ = require('underscore')
 
+require('es6-promise').polyfill();
+
 describe('reduce', function () {
-  it('filters an array', async function () {
+  it('filters an array', function () {
     var items = [1, 2, 3, 4]
 
-    var results = await reduce(items, (sum, n) => sum + n, 0)
-    expect(results).to.eql(10)
+    return reduce(items, function (sum, n) { return sum + n }, 0).then(function (results) {
+      expect(results).to.eql(10)
+    })
   })
 
-  it('filters an array with promise predicate', async function () {
+  it('filters an array with promise predicate', function () {
     var items = [1, 2, 3, 4]
 
-    var results = await reduce(items, (sum, n) => Promise.resolve(sum + n), 0)
-    expect(results).to.eql(10)
+    return reduce(items, function (sum, n) { return Promise.resolve(sum + n) }, 0).then(function (results) {
+      expect(results).to.eql(10)
+    })
   })
 
-  it('filters an empty array', async function () {
+  it('filters an empty array', function () {
     var items = []
 
-    var results = await reduce(items, (sum, n) => sum + n, 0)
-    expect(results).to.eql(0)
+    return reduce(items, function (sum, n) { return sum + n }, 0).then(function (results) {
+      expect(results).to.eql(0)
+    })
   })
 
   it("doesn't hold up the main thread", function () {
@@ -42,7 +47,7 @@ describe('reduce', function () {
       while ((Date.now() - startTime) <= 5) {
       }
       return sum + n
-    }, 0).then(() => {
+    }, 0).then(function () {
       expect(times.length).to.be.greaterThan(1)
       expect(_.max(times)).to.be.lessThan(20)
     })

@@ -2,26 +2,31 @@ var filter = require('../filter')
 var expect = require('chai').expect
 var _ = require('underscore')
 
+require('es6-promise').polyfill();
+
 describe('filter', function () {
-  it('filters an array', async function () {
+  it('filters an array', function () {
     var items = [1, 2, 3, 4]
 
-    var results = await filter(items, (n) => n % 2 == 0)
-    expect(results).to.eql([2, 4])
+    return filter(items, function (n) { return n % 2 == 0 }).then(function (results) {
+      expect(results).to.eql([2, 4])
+    })
   })
 
-  it('filters an array with promise predicate', async function () {
+  it('filters an array with promise predicate', function () {
     var items = [1, 2, 3, 4]
 
-    var results = await filter(items, (n) => Promise.resolve(n % 2 == 0))
-    expect(results).to.eql([2, 4])
+    return filter(items, function (n) { return Promise.resolve(n % 2 == 0) }).then(function (results) {
+      expect(results).to.eql([2, 4])
+    })
   })
 
-  it('filters an empty array', async function () {
+  it('filters an empty array', function () {
     var items = []
 
-    var results = await filter(items, (n) => n % 2 == 0)
-    expect(results).to.eql([])
+    return filter(items, function (n) { return n % 2 == 0 }).then(function (results) {
+      expect(results).to.eql([])
+    })
   })
 
   it("doesn't hold up the main thread", function () {
@@ -42,7 +47,7 @@ describe('filter', function () {
       while ((Date.now() - startTime) <= 5) {
       }
       return n % 2 == 0
-    }).then(() => {
+    }).then(function () {
       expect(times.length).to.be.greaterThan(1)
       expect(_.max(times)).to.be.lessThan(20)
     })

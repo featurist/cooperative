@@ -1,4 +1,5 @@
-module.exports = function map(array, map, {interval = 10} = {}) {
+module.exports = function map(array, map, options) {
+  var interval = typeof options == 'object' && options.hasOwnProperty('interval')? options.interval: 10;
   var results = []
 
   function recurse(startIndex) {
@@ -8,7 +9,7 @@ module.exports = function map(array, map, {interval = 10} = {}) {
       var item = array[a];
 
       if (Date.now() - startTime > interval) {
-        return new Promise((resolve) => {
+        return new Promise(function (resolve) {
           setImmediate(resolve)
         }).then(function () {
           return recurse(a)

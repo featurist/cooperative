@@ -2,24 +2,28 @@ var forEach = require('../forEach')
 var expect = require('chai').expect
 var _ = require('underscore')
 
+require('es6-promise').polyfill();
+
 describe('forEach', function () {
-  it('acts on each item in the array', async function () {
+  it('acts on each item in the array', function () {
     var results = []
     var items = [1, 2, 3, 4]
 
-    await forEach(items, (n) => results.push(-n))
-    expect(results).to.eql([-1, -2, -3, -4])
+    return forEach(items, function (n) { results.push(-n) }).then(function () {
+      expect(results).to.eql([-1, -2, -3, -4])
+    })
   })
 
-  it('maps an array with promise mapper', async function () {
+  it('maps an array with promise mapper', function () {
     var results = []
     var items = [1, 2, 3, 4]
 
-    await forEach(items, (n) => {
+    return forEach(items, function (n) {
       results.push(-n)
       return Promise.resolve()
+    }).then(function () {
+      expect(results).to.eql([-1, -2, -3, -4])
     })
-    expect(results).to.eql([-1, -2, -3, -4])
   })
 
   it("doesn't hold up the main thread", function () {
@@ -40,7 +44,7 @@ describe('forEach', function () {
       while ((Date.now() - startTime) <= 5) {
       }
       return -n
-    }).then(() => {
+    }).then(function () {
       expect(times.length).to.be.greaterThan(1)
       expect(_.max(times)).to.be.lessThan(20)
     })
