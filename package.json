@@ -1,6 +1,6 @@
 {
   "name": "cooperative",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "cooperative threading versions of map, filter, forEach, etc, suitable for big processing in single-threaded Node.js",
   "main": "index.js",
   "directories": {
